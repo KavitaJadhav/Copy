@@ -19,5 +19,25 @@ copy.removeDirectoryRecursively = function(directory){
 	fs.rmdirSync(directory);
 };
 
+copy.copyFileToDestination = function(sourse , destination , file){
+	var writeLocation = destination +'/'+ file;
+	if(fs.existsSync(writeLocation)) return ;
+	
+	var text = fs.readFileSync(sourse + '/' + file);
+	console.log("\n.........Copying "+ file + " to " + destination)
+	fs.writeFileSync(writeLocation, text);
+};
+
+copy.copyFiles = function(sourse , destination , option){
+
+	if(option == '--all') copy.removeDirectoryRecursively(destination);
+	copy.createDir(destination);
+
+	var sourseFiles = copy.filesInDirectory(sourse);
+	sourseFiles.forEach(function(file){
+		copy.copyFileToDestination(sourse , destination , file);
+	})
+};
+
 exports.copy = copy;
 
